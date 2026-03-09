@@ -1,1 +1,5 @@
 npm run migration:run ejecutar migraciones
+npm run start:dev
+
+jsacosta
+squiroz

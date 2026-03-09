@@ -66,7 +66,35 @@ const updateEstado = async (id, estado, id_backoffice) => {
 
 const update = async (id, data) => {
     await getById(id);
-    return await updatePoliza(id, data);
+
+    // Separar conductores del resto de campos
+    const { conductores, ...camposPoliza } = data;
+
+    // Actualizar campos de la póliza
+    await updatePoliza(id, camposPoliza);
+
+    // Sincronizar conductores si se enviaron
+    if (conductores !== undefined) {
+        // Obtener conductores actuales
+        const polizaActual = await findPolizaById(id);
+        const idsActuales = polizaActual.conductores?.map(c => c.afiliado?.id).filter(Boolean) ?? [];
+
+        // Agregar los nuevos
+        for (const id_conductor of conductores) {
+            if (!idsActuales.includes(id_conductor)) {
+                await addConductor(id, id_conductor);
+            }
+        }
+
+        // Quitar los que se deseleccionaron
+        for (const id_actual of idsActuales) {
+            if (!conductores.includes(id_actual)) {
+                await removeConductor(id, id_actual);
+            }
+        }
+    }
+
+    return await findPolizaById(id);
 };
 
 module.exports = { getAll, getById, getByAfiliado, create, updateEstado, update };
