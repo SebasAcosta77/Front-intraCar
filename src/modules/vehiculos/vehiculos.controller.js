@@ -1,10 +1,10 @@
 const {
     getAll,
     getById,
-    getByPoliza,
     create,
     update,
     remove,
+    getByAfiliado
 } = require('./vehiculos.service.js');
 
 const getAllController = async (req, res) => {
@@ -26,10 +26,10 @@ const getByIdController = async (req, res) => {
     }
 };
 
-const getByPolizaController = async (req, res) => {
+const getByAfiliadoController = async (req, res) => {
     try {
-        const { id_poliza } = req.params;
-        const vehiculos = await getByPoliza(Number(id_poliza));
+        const { id_afiliado } = req.params;
+        const vehiculos = await getByAfiliado(Number(id_afiliado));
         return res.status(200).json({ ok: true, data: vehiculos });
     } catch (error) {
         return res.status(500).json({ ok: false, message: error.message });
@@ -79,8 +79,8 @@ const deleteController = async (req, res) => {
 module.exports = {
     getAllController,
     getByIdController,
-    getByPolizaController,
     createController,
     updateController,
     deleteController,
+    getByAfiliadoController
 };

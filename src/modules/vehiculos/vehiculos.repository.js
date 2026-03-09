@@ -5,7 +5,8 @@ const getRepository = () => AppDataSource.getRepository('vehiculos');
 const findAllVehiculos = async () => {
     const repo = getRepository();
     return await repo.find({
-        relations: ['poliza', 'cobertura'],
+        relations: ['afiliado', 'cobertura'],
+        order: { id: 'DESC' },
     });
 };
 
@@ -13,15 +14,15 @@ const findVehiculoById = async (id) => {
     const repo = getRepository();
     return await repo.findOne({
         where: { id },
-        relations: ['poliza', 'cobertura'],
+        relations: ['afiliado', 'cobertura'],  // 
     });
 };
 
-const findVehiculosByPoliza = async (id_poliza) => {
+const findVehiculosByAfiliado = async (id_afiliado) => {
     const repo = getRepository();
     return await repo.find({
-        where: { id_poliza },
-        relations: ['cobertura'],
+        where: { id_afiliado },
+        relations: ['afiliado', 'cobertura'],
     });
 };
 
@@ -45,8 +46,8 @@ const deleteVehiculo = async (id) => {
 module.exports = {
     findAllVehiculos,
     findVehiculoById,
-    findVehiculosByPoliza,
     createVehiculo,
     updateVehiculo,
     deleteVehiculo,
+    findVehiculosByAfiliado
 };

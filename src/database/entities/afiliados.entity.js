@@ -78,6 +78,12 @@ const AfiliadosEntity = new EntitySchema({
             inverseSide: 'afiliado',
             eager: false,
         },
+        vehiculos: {
+            type: 'one-to-many',
+            target: 'vehiculos',
+            inverseSide: 'afiliado',
+            eager: false,
+        },
     },
 });
 

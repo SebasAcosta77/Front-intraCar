@@ -2,7 +2,7 @@ class AddEstadoAfiliados1708263000005 {
     name = 'AddEstadoAfiliados1708263000005';
 
     async up(queryRunner) {
-        // ✅ DEFAULT 'interesado' — los registros existentes quedan con ese valor
+        //  DEFAULT 'interesado' — los registros existentes quedan con ese valor
         await queryRunner.query(`
       ALTER TABLE afiliados
         ADD COLUMN estado VARCHAR(30) NOT NULL DEFAULT 'interesado'

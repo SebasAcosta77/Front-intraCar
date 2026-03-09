@@ -9,7 +9,7 @@ const VehiculosEntity = new EntitySchema({
             type: 'int',
             generated: true,
         },
-        id_poliza: {
+        id_afiliado: {          // ← DENTRO de columns
             type: 'int',
             nullable: false,
         },
@@ -52,11 +52,11 @@ const VehiculosEntity = new EntitySchema({
         },
     },
     relations: {
-        poliza: {
+        afiliado: {
             type: 'many-to-one',
-            target: 'poliza',
+            target: 'afiliados',
             joinColumn: {
-                name: 'id_poliza',
+                name: 'id_afiliado',
                 referencedColumnName: 'id',
             },
             eager: false,
@@ -67,7 +67,7 @@ const VehiculosEntity = new EntitySchema({
             inverseSide: 'vehiculo',
             eager: false,
         },
-    },
+    }
 });
 
 module.exports = { VehiculosEntity };

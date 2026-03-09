@@ -2,10 +2,10 @@ const { Router } = require('express');
 const {
     getAllController,
     getByIdController,
-    getByPolizaController,
     createController,
     updateController,
     deleteController,
+    getByAfiliadoController,
 } = require('./vehiculos.controller.js');
 const { authMiddleware, roleMiddleware } = require('../../middlewares/auth.middleware.js');
 
@@ -19,8 +19,7 @@ router.get('/list', getAllController);
 // GET /api/v1/vehiculos/listone/:id
 router.get('/listone/:id', getByIdController);
 
-// GET /api/v1/vehiculos/poliza/:id_poliza
-router.get('/poliza/:id_poliza', getByPolizaController);
+router.get('/afiliado/:id_afiliado', getByAfiliadoController);
 
 // POST /api/v1/vehiculos/create — Agente
 router.post('/create', roleMiddleware(1), createController);

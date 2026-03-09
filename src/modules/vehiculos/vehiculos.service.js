@@ -1,13 +1,13 @@
 const {
     findAllVehiculos,
     findVehiculoById,
-    findVehiculosByPoliza,
     createVehiculo,
     updateVehiculo,
     deleteVehiculo,
+    findVehiculosByAfiliado,
 } = require('./vehiculos.repository.js');
 
-const { findPolizaById } = require('../poliza/poliza.repository.js');
+const { findAfiliadoById } = require('../afiliados/afiliados.repository.js');
 
 const getAll = async () => {
     return await findAllVehiculos();
@@ -19,17 +19,15 @@ const getById = async (id) => {
     return vehiculo;
 };
 
-const getByPoliza = async (id_poliza) => {
-    return await findVehiculosByPoliza(id_poliza);
+const getByAfiliado = async (id_afiliado) => {
+    return await findVehiculosByAfiliado(id_afiliado);
 };
 
 const create = async (data) => {
-    // Verificar que la póliza exista y esté aceptada
-    const poliza = await findPolizaById(data.id_poliza);
-    if (!poliza) throw new Error(`Póliza con id ${data.id_poliza} no encontrada`);
-    if (poliza.estado_poliza !== 'aceptada') {
-        throw new Error(`La póliza debe estar en estado "aceptada" para registrar vehículos. Estado actual: ${poliza.estado_poliza}`);
-    }
+    // Verificar que el afiliado exista y sea titular
+    const afiliado = await findAfiliadoById(data.id_afiliado);
+    if (!afiliado) throw new Error(`Afiliado con id ${data.id_afiliado} no encontrado`);
+    if (!afiliado.es_titular) throw new Error(`El afiliado ${data.id_afiliado} no es titular`);
 
     return await createVehiculo(data);
 };
@@ -44,4 +42,4 @@ const remove = async (id) => {
     return await deleteVehiculo(id);
 };
 
-module.exports = { getAll, getById, getByPoliza, create, update, remove };
+module.exports = { getAll, getById, getByAfiliado, create, update, remove };

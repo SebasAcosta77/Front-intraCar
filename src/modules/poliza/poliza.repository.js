@@ -6,7 +6,15 @@ const getConductoresRepository = () => AppDataSource.getRepository('poliza_condu
 const findAllPolizas = async () => {
     const repo = getRepository();
     return await repo.find({
-        relations: ['afiliado', 'backoffice', 'conductores', 'vehiculos'],
+        relations: [
+            'afiliado',
+            'afiliado.detalles',
+            'afiliado.vehiculos',
+            'afiliado.vehiculos.cobertura',
+            'conductores',
+            'conductores.afiliado',
+        ],
+        order: { id: 'DESC' },
     });
 };
 
@@ -15,13 +23,13 @@ const findPolizaById = async (id) => {
     return await repo.findOne({
         where: { id },
         relations: [
-            'afiliado',                    // titular
-            'afiliado.detalles',           // detalles del titular
-            'backoffice',                  // quien cotiza
-            'conductores',                 // registros poliza_conductores
-            'conductores.afiliado',        // datos de cada conductor
-            'conductores.afiliado.detalles', // detalles de cada conductor
-            'vehiculos',                   // vehículos de la póliza
+            'afiliado',
+            'afiliado.detalles',
+            'afiliado.vehiculos',
+            'afiliado.vehiculos.cobertura',
+            'conductores',
+            'conductores.afiliado',
+            'conductores.afiliado.detalles',
         ],
     });
 };
