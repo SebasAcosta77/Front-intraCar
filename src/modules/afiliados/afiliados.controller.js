@@ -41,7 +41,7 @@ const getByAgenteController = async (req, res) => {
 
 const createController = async (req, res) => {
     try {
-        const id_agente = req.user.id; // viene del JWT
+        const id_agente = req.user.id;
         const afiliado = await create(req.body, id_agente);
         return res.status(201).json({
             ok: true,
@@ -67,6 +67,27 @@ const updateController = async (req, res) => {
     }
 };
 
+// PATCH /api/v1/afiliados/estado/:id — actualiza solo estado y nota_estado
+const patchEstadoController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { estado, nota_estado } = req.body;
+
+        if (!estado) {
+            return res.status(400).json({ ok: false, message: 'estado es requerido' });
+        }
+
+        const afiliado = await update(Number(id), { estado, nota_estado: nota_estado ?? null });
+        return res.status(200).json({
+            ok: true,
+            message: 'Estado actualizado exitosamente',
+            data: afiliado,
+        });
+    } catch (error) {
+        return res.status(400).json({ ok: false, message: error.message });
+    }
+};
+
 const deleteController = async (req, res) => {
     try {
         const { id } = req.params;
@@ -79,6 +100,7 @@ const deleteController = async (req, res) => {
         return res.status(400).json({ ok: false, message: error.message });
     }
 };
+
 const vincularController = async (req, res) => {
     try {
         const { id_titular, id_conductor } = req.body;
@@ -118,6 +140,7 @@ module.exports = {
     getByAgenteController,
     createController,
     updateController,
+    patchEstadoController,
     deleteController,
     vincularController,
     conductoresDeTitularController,

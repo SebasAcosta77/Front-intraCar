@@ -61,6 +61,10 @@ const AfiliadosEntity = new EntitySchema({
             default: 'interesado',
             nullable: false,
         },
+        nota_estado: {
+            type: 'text',
+            nullable: true,
+        },
     },
     relations: {
         agente: {

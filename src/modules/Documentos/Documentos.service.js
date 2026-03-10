@@ -8,10 +8,9 @@ const {
     findByAfiliadoYTipo,
     createDocumento,
     deleteDocumento,
+    
 } = require('./Documentos.repository');
 
-
-// Las imágenes se guardan en: /uploads/documentos/<id_afiliado>/
 const UPLOAD_BASE = path.join(__dirname, '..', '..', '..', 'uploads', 'documentos');
 
 const getUploadDir = (id_afiliado) => {
@@ -20,13 +19,9 @@ const getUploadDir = (id_afiliado) => {
     return dir;
 };
 
-// ─── Servicios ────────────────────────────────────────────────────────────────
-
-const getAll = async () => findAll();
-
+const getAll       = async () => findAll();
 const getByAfiliado = async (id_afiliado) => findByAfiliado(id_afiliado);
-
-const getByAgente = async (id_agente) => findByAgente(id_agente);
+const getByAgente   = async (id_agente) => findByAgente(id_agente);
 
 const getById = async (id) => {
     const doc = await findById(id);
@@ -35,38 +30,29 @@ const getById = async (id) => {
 };
 
 /**
- * Sube un documento para un afiliado.
- * Si ya existe un documento del mismo tipo, reemplaza el archivo y el registro.
- *
- * @param {number} id_afiliado
- * @param {number} id_user       - ID del usuario que sube (agente)
- * @param {string} tipo_documento - Ej: 'declaration_page_1', 'licencia_1'
- * @param {object} archivo        - Objeto multer (buffer, originalname, mimetype)
- * @param {number} obligatorio    - 1 = requerido, 0 = opcional
+ * Sube un archivo físico y guarda registro en BD
  */
 const upload = async (id_afiliado, id_user, tipo_documento, archivo, obligatorio = 1) => {
     if (!archivo) throw new Error('No se recibió ningún archivo');
 
     const uploadDir = getUploadDir(id_afiliado);
 
-    // Si ya existe uno del mismo tipo → eliminar archivo físico anterior
     const existing = await findByAfiliadoYTipo(id_afiliado, tipo_documento);
     if (existing) {
-        const rutaAnterior = path.join(__dirname, '..', '..', '..', existing.ruta_archivo);
-        if (fs.existsSync(rutaAnterior)) fs.unlinkSync(rutaAnterior);
+        if (existing.ruta_archivo) {
+            const rutaAnterior = path.join(__dirname, '..', '..', '..', existing.ruta_archivo);
+            if (fs.existsSync(rutaAnterior)) fs.unlinkSync(rutaAnterior);
+        }
         await deleteDocumento(existing.id);
     }
 
-    // Construir nombre único y ruta relativa
     const ext          = path.extname(archivo.originalname).toLowerCase();
     const nombreFisico = `${tipo_documento}_${Date.now()}${ext}`;
     const rutaRelativa = `uploads/documentos/${id_afiliado}/${nombreFisico}`;
     const rutaAbsoluta = path.join(uploadDir, nombreFisico);
 
-    // Escribir archivo en disco
     fs.writeFileSync(rutaAbsoluta, archivo.buffer);
 
-    // Guardar registro en BD
     return await createDocumento({
         id_afiliado:    Number(id_afiliado),
         id_user:        Number(id_user),
@@ -78,15 +64,38 @@ const upload = async (id_afiliado, id_user, tipo_documento, archivo, obligatorio
 };
 
 /**
- * Elimina un documento (registro BD + archivo físico)
+ * Guarda un texto (número de cuenta) sin archivo físico.
+ * nombre_archivo = el texto ingresado
+ * ruta_archivo   = null
+ */
+const uploadTexto = async (id_afiliado, id_user, tipo_documento, texto, obligatorio = 0) => {
+    if (!texto || !texto.trim()) throw new Error('El texto no puede estar vacío');
+
+    const existing = await findByAfiliadoYTipo(id_afiliado, tipo_documento);
+    if (existing) await deleteDocumento(existing.id);
+
+    return await createDocumento({
+        id_afiliado:    Number(id_afiliado),
+        id_user:        Number(id_user),
+        tipo_documento,
+        nombre_archivo: texto.trim(),
+        ruta_archivo:   null,
+        obligatorio:    Number(obligatorio),
+    });
+};
+
+/**
+ * Elimina un documento — borra archivo físico si existe, luego el registro.
  */
 const remove = async (id) => {
     const doc = await getById(id);
 
-    const rutaAbsoluta = path.join(__dirname, '..', '..', '..', doc.ruta_archivo);
-    if (fs.existsSync(rutaAbsoluta)) fs.unlinkSync(rutaAbsoluta);
+    if (doc.ruta_archivo) {
+        const rutaAbsoluta = path.join(__dirname, '..', '..', '..', doc.ruta_archivo);
+        if (fs.existsSync(rutaAbsoluta)) fs.unlinkSync(rutaAbsoluta);
+    }
 
     return await deleteDocumento(id);
 };
 
-module.exports = { getAll, getByAfiliado, getByAgente, getById, upload, remove };
+module.exports = { getAll, getByAfiliado, getByAgente, getById, upload, uploadTexto, remove };

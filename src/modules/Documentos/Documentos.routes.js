@@ -6,12 +6,15 @@ const {
     getByAgenteController,
     uploadController,
     deleteController,
+    uploadTextoController
+    
+    
 } = require('./Documentos.controller.js');
 const { authMiddleware, roleMiddleware } = require('../../middlewares/auth.middleware.js');
 
 const router = Router();
 
-// ─── Multer en memoria (el service escribe el archivo en disco) ───────────────
+
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB máximo
@@ -41,5 +44,10 @@ router.post('/upload/:id_afiliado', roleMiddleware(1), upload.single('archivo'),
 
 // DELETE /api/v1/documentos/delete/:id        — Agente o Backoffice
 router.delete('/delete/:id', deleteController);
+
+// POST /api/v1/documentos/backoffice/upload/:id_afiliado — BackOffice sube cotizaciones (rol 2)
+router.post('/backoffice/upload/:id_afiliado', roleMiddleware(2), upload.single('archivo'), uploadController);
+
+router.post('/backoffice/texto/:id_afiliado', roleMiddleware(2), uploadTextoController);
 
 module.exports = router;

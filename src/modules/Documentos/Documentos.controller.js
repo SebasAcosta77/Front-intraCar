@@ -1,4 +1,4 @@
-const { getAll, getByAfiliado, getByAgente, getById, upload, remove } = require('./Documentos.service');
+const { getAll, getByAfiliado, getByAgente, getById, upload, remove, uploadTexto } = require('./Documentos.service');
 
 // GET /api/v1/documentos/list  — backoffice ve todos
 const getAllController = async (req, res) => {
@@ -74,10 +74,33 @@ const deleteController = async (req, res) => {
     }
 };
 
+const uploadTextoController = async (req, res) => {
+    try {
+        const { id_afiliado } = req.params;
+        const { tipo_documento, texto } = req.body;
+
+        if (!tipo_documento) return res.status(400).json({ ok: false, message: 'tipo_documento es requerido' });
+        if (!texto)          return res.status(400).json({ ok: false, message: 'texto es requerido' });
+
+        const doc = await uploadTexto(
+            Number(id_afiliado),
+            req.user.id,
+            tipo_documento,
+            texto,
+            0,
+        );
+
+        return res.status(201).json({ ok: true, message: 'Guardado correctamente', data: doc });
+    } catch (err) {
+        return res.status(400).json({ ok: false, message: err.message });
+    }
+};
+
 module.exports = {
     getAllController,
     getByAfiliadoController,
     getByAgenteController,
     uploadController,
     deleteController,
+    uploadTextoController
 };
