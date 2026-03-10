@@ -77,10 +77,24 @@ const patchEstadoController = async (req, res) => {
             return res.status(400).json({ ok: false, message: 'estado es requerido' });
         }
 
-        const afiliado = await update(Number(id), { estado, nota_estado: nota_estado ?? null });
+        const payload = { estado, nota_estado: nota_estado ?? null };
+
+        // 1. Actualizar el titular
+        const afiliado = await update(Number(id), payload);
+
+        // 2. Buscar conductores vinculados
+        const { AppDataSource } = require('../../database/data-source.js');
+        const ctRepo = AppDataSource.getRepository('conductor_titular');
+        const vinculados = await ctRepo.find({ where: { id_titular: Number(id) } });
+
+        // 3. Propagar el mismo estado a cada conductor
+        await Promise.all(
+            vinculados.map(v => update(v.id_conductor, payload))
+        );
+
         return res.status(200).json({
             ok: true,
-            message: 'Estado actualizado exitosamente',
+            message: `Estado actualizado para el titular y ${vinculados.length} conductor(es)`,
             data: afiliado,
         });
     } catch (error) {

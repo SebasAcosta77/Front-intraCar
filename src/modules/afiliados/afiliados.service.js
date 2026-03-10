@@ -43,7 +43,8 @@ const create = async (data, id_agente) => {
 };
 
 const update = async (id, data) => {
-    await getById(id); // valida que exista
+    console.log('UPDATE data recibida:', data); // ← agrega esto
+    await getById(id);
     return await updateAfiliado(id, data);
 };
 
