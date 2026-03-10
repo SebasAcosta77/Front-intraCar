@@ -7,6 +7,7 @@ const polizaRoutes = require('./modules/poliza/poliza.routes.js');
 const vehiculosRoutes = require('./modules/vehiculos/vehiculos.routes.js');
 const coberturaRoutes = require('./modules/cobertura/cobertura.routes.js');
 const detallesRoutes = require('./modules/detalles/detalles.routes.js');
+const documentosRoutes = require('./modules/Documentos/Documentos.routes.js');
 
 
 dotenv.config();
@@ -36,6 +37,12 @@ app.use('/api/v1/polizas', polizaRoutes);
 app.use('/api/v1/vehiculos', vehiculosRoutes);
 app.use('/api/v1/coberturas', coberturaRoutes);
 app.use('/api/v1/detalles', detallesRoutes);
+app.use('/api/v1/documentos', documentosRoutes);
+
+
+
+const path = require('path'); // si no lo tienes ya importado arriba
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 
 app.get('/', (req, res) => {
