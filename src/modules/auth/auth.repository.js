@@ -24,14 +24,14 @@ const createUser = async (userData) => {
     return await repo.save(user);
 };
 
-// ✅ Crear registro de log al iniciar sesión
+// Crear registro de log al iniciar sesión
 const createLog = async (data) => {
     const repo = getLogRepository();
     const log = repo.create(data);
     return await repo.save(log);
 };
 
-// ✅ Actualizar hora_finish al cerrar sesión
+//  Actualizar hora_finish al cerrar sesión
 const updateLogFinish = async (id_user) => {
     const repo = getLogRepository();
     const ahora = new Date();

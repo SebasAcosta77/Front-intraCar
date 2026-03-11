@@ -8,7 +8,7 @@ const {
 } = require('./detalles.controller.js');
 const { authMiddleware, roleMiddleware } = require('../../middlewares/auth.middleware.js');
 
-const router = Router({ mergeParams: true }); //  mergeParams para acceder a :id_afiliado del padre
+const router = Router({ mergeParams: true }); 
 
 // Todas las rutas requieren JWT
 router.use(authMiddleware);

@@ -1,4 +1,4 @@
-// 008-alter-vehiculos-afiliado.js
+
 
 class AlterVehiculosAfiliado1741479600000 {
     name = 'AlterVehiculosAfiliado1741479600000';

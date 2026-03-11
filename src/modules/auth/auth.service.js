@@ -28,7 +28,7 @@ const login = async (username, password) => {
         { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
     );
 
-    // 5. ✅ Registrar log de conexión
+    
     const ahora = new Date();
     const fecha = ahora.toISOString().split('T')[0];
     const hora_start = ahora.toTimeString().split(' ')[0];

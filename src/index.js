@@ -41,7 +41,7 @@ app.use('/api/v1/documentos', documentosRoutes);
 
 
 
-const path = require('path'); // si no lo tienes ya importado arriba
+const path = require('path'); 
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 

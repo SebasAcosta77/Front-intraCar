@@ -73,7 +73,6 @@ const update = async (id, data) => {
     // Actualizar campos de la póliza
     await updatePoliza(id, camposPoliza);
 
-    // Sincronizar conductores si se enviaron
     if (conductores !== undefined) {
         // Obtener conductores actuales
         const polizaActual = await findPolizaById(id);

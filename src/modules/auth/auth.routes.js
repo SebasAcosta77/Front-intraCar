@@ -10,7 +10,7 @@ router.post('/login', loginController);
 // POST /api/v1/auth/register
 router.post('/register', registerController);
 
-// POST /api/v1/auth/logout ✅
+// POST /api/v1/auth/logout 
 router.post('/logout', authMiddleware, logoutController);
 
 module.exports = router;
