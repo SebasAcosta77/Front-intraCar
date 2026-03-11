@@ -18,6 +18,7 @@ class CreateAfiliadosDetalles1708263000001 {
         direccion_estado VARCHAR(40) DEFAULT NULL,
         codigo_postal VARCHAR(10) DEFAULT NULL,
         genero VARCHAR(20) DEFAULT NULL,
+        nota_estado TEXT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (id),

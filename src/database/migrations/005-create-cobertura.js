@@ -53,7 +53,7 @@ class CreateCobertura1708263000004 {
         id_user        INT          NOT NULL,
         tipo_documento VARCHAR(60)  NOT NULL,
         nombre_archivo VARCHAR(255) NOT NULL,
-        ruta_archivo   VARCHAR(255) NOT NULL,
+        ruta_archivo   VARCHAR(500) NOT NULL,
         obligatorio    TINYINT(1)   NOT NULL DEFAULT 1,
         fecha_carga    DATETIME     DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),

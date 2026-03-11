@@ -7,7 +7,7 @@ const PolizaEntity = new EntitySchema({
         id: { primary: true, type: 'int', generated: true },
         id_afiliado: { type: 'int', nullable: false },
         id_backoffice: { type: 'int', nullable: true },
-        estado_poliza: { type: 'varchar', length: 20, default: 'cotizando', nullable: false },
+        estado_poliza: { type: 'varchar', length: 20, default: 'pendiente_pago', nullable: false },
         poliza_anterior: { type: 'varchar', length: 100, nullable: true },
         tiempo_poliza_anterior: { type: 'varchar', length: 100, nullable: true },
         fecha_vencimiento_poliza_anterior: { type: 'date', nullable: true },

@@ -34,7 +34,7 @@ const create = async (data, id_backoffice) => {
     const poliza = await createPoliza({
         id_afiliado: data.id_afiliado,
         id_backoffice: id_backoffice,
-        estado_poliza: 'cotizando',
+        estado_poliza: 'pendiente_pago',
         poliza_anterior: data.poliza_anterior,
         tiempo_poliza_anterior: data.tiempo_poliza_anterior,
         fecha_vencimiento_poliza_anterior: data.fecha_vencimiento_poliza_anterior,

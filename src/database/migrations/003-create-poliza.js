@@ -12,7 +12,7 @@ class CreatePoliza1708263000002 {
         id INT NOT NULL AUTO_INCREMENT,
         id_afiliado INT NOT NULL,
         id_backoffice INT DEFAULT NULL,
-        estado_poliza VARCHAR(20) NOT NULL DEFAULT 'cotizando',
+        estado_poliza VARCHAR(20) NOT NULL DEFAULT 'pendiente_pago',
         poliza_anterior VARCHAR(100) DEFAULT NULL,
         tiempo_poliza_anterior VARCHAR(100) DEFAULT NULL,
         fecha_vencimiento_poliza_anterior DATE DEFAULT NULL,
