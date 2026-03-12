@@ -6,8 +6,10 @@
   "scripts": {
     "start": "node src/index.js",
     "start:dev": "nodemon src/index.js",
-    "migration:run": "typeorm migration:run -d src/database/data-source.js",
-    "migration:revert": "typeorm migration:revert -d src/database/data-source.js"
+    "start:prod": "cross-env NODE_ENV=production node src/index.js",
+    "migration:run": "cross-env NODE_ENV=development typeorm migration:run -d src/database/data-source.js",
+    "migration:run:prod": "cross-env NODE_ENV=production typeorm migration:run -d src/database/data-source.js",
+    "migration:revert": "cross-env NODE_ENV=development typeorm migration:revert -d src/database/data-source.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +18,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.6",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
