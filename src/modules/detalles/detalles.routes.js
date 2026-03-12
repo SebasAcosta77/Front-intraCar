@@ -17,13 +17,13 @@ router.use(authMiddleware);
 router.get('/', getByAfiliadoController);
 
 // POST /api/v1/afiliados/:id_afiliado/detalles
-router.post('/', roleMiddleware(1), createController);
+router.post('/', roleMiddleware(1, 3), createController);
 
 // PUT /api/v1/afiliados/:id_afiliado/detalles
-router.put('/', roleMiddleware(1), updateController);
+router.put('/', roleMiddleware(1, 3), updateController);
 
 // DELETE /api/v1/afiliados/:id_afiliado/detalles
-router.delete('/', roleMiddleware(1), deleteController);
+router.delete('/', roleMiddleware(1, 3), deleteController);
 
 router.get('/list', getAllController);
 

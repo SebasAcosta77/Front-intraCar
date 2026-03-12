@@ -22,12 +22,12 @@ router.get('/listone/:id', getByIdController);
 router.get('/afiliado/:id_afiliado', getByAfiliadoController);
 
 // POST /api/v1/vehiculos/create — Agente
-router.post('/create', roleMiddleware(1), createController);
+router.post('/create', roleMiddleware(1, 3), createController);
 
 // PUT /api/v1/vehiculos/update/:id — Agente
-router.put('/update/:id', roleMiddleware(1), updateController);
+router.put('/update/:id', roleMiddleware(1, 3), updateController);
 
 // DELETE /api/v1/vehiculos/delete/:id — Agente
-router.delete('/delete/:id', roleMiddleware(1), deleteController);
+router.delete('/delete/:id', roleMiddleware(1, 3), deleteController);
 
 module.exports = router;

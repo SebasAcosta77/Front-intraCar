@@ -18,10 +18,29 @@ const findUserById = async (id) => {
     });
 };
 
+const findAllUsers = async () => {
+    const repo = getRepository();
+    return await repo.find({
+        select: ['IdU', 'NameU', 'JobTitle', 'UserA', 'Correo_e', 'RoleU', 'Ciudad', 'estado'],
+        order: { IdU: 'DESC' },
+    });
+};
+
 const createUser = async (userData) => {
     const repo = getRepository();
     const user = repo.create(userData);
     return await repo.save(user);
+};
+
+const updateUser = async (id, userData) => {
+    const repo = getRepository();
+    await repo.update({ IdU: id }, userData);
+    return await repo.findOne({ where: { IdU: id } });
+};
+
+const deleteUser = async (id) => {
+    const repo = getRepository();
+    return await repo.delete({ IdU: id });
 };
 
 // Crear registro de log al iniciar sesión
@@ -31,7 +50,6 @@ const createLog = async (data) => {
     return await repo.save(log);
 };
 
-//  Actualizar hora_finish al cerrar sesión
 const updateLogFinish = async (id_user) => {
     const repo = getLogRepository();
     const ahora = new Date();
@@ -53,7 +71,10 @@ const updateLogFinish = async (id_user) => {
 module.exports = {
     findUserByUsername,
     findUserById,
+    findAllUsers,
     createUser,
+    updateUser,
+    deleteUser,
     createLog,
     updateLogFinish,
 };

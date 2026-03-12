@@ -23,12 +23,12 @@ router.get('/listone/:id', getByIdController);
 router.get('/vehiculo/:id_vehiculo', getByVehiculoController);
 
 // POST /api/v1/coberturas/create — solo BackOffice
-router.post('/create', roleMiddleware(1), createController);
+router.post('/create', roleMiddleware(1, 3), createController);
 
 // PUT /api/v1/coberturas/update/:id_vehiculo — solo BackOffice
-router.put('/update/:id_vehiculo', roleMiddleware(1), updateController);
+router.put('/update/:id_vehiculo', roleMiddleware(1, 3), updateController);
 
 // DELETE /api/v1/coberturas/delete/:id_vehiculo — solo BackOffice
-router.delete('/delete/:id_vehiculo', roleMiddleware(1), deleteController);
+router.delete('/delete/:id_vehiculo', roleMiddleware(1, 3), deleteController);
 
 module.exports = router;

@@ -1,34 +1,27 @@
-// src/modules/auth/auth.service.js
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { findUserByUsername, createUser, createLog, updateLogFinish } = require('./auth.repository.js');
+const {
+    findUserByUsername, findAllUsers,
+    createUser, updateUser, deleteUser,
+    createLog, updateLogFinish,
+} = require('./auth.repository.js');
 
 const SALT_ROUNDS = 10;
 
 const login = async (username, password) => {
-    // 1. Verificar si el usuario existe
     const user = await findUserByUsername(username);
     if (!user) throw new Error('Credenciales inválidas');
-
-    // 2. Verificar si está activo
     if (!user.estado) throw new Error('Usuario inactivo');
 
-    // 3. Verificar contraseña
     const passwordValid = await bcrypt.compare(password, user.PasswordU);
     if (!passwordValid) throw new Error('Credenciales inválidas');
 
-    // 4. Generar JWT
     const token = jwt.sign(
-        {
-            id: user.IdU,
-            username: user.UserA,
-            role: user.RoleU,
-        },
+        { id: user.IdU, username: user.UserA, role: user.RoleU },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
     );
 
-    
     const ahora = new Date();
     const fecha = ahora.toISOString().split('T')[0];
     const hora_start = ahora.toTimeString().split(' ')[0];
@@ -64,14 +57,11 @@ const logout = async (id_user) => {
 };
 
 const register = async (userData) => {
-    // 1. Verificar si el usuario ya existe
     const existingUser = await findUserByUsername(userData.UserA);
     if (existingUser) throw new Error('El nombre de usuario ya está en uso');
 
-    // 2. Hashear contraseña
     const hashedPassword = await bcrypt.hash(userData.PasswordU, SALT_ROUNDS);
 
-    // 3. Crear usuario
     const newUser = await createUser({
         ...userData,
         PasswordU: hashedPassword,
@@ -88,4 +78,27 @@ const register = async (userData) => {
     };
 };
 
-module.exports = { login, logout, register };
+const listarUsuarios = async () => {
+    return await findAllUsers();
+};
+
+const actualizarUsuario = async (id, userData) => {
+    // Si viene nueva contraseña, hashearla
+    if (userData.PasswordU) {
+        userData.PasswordU = await bcrypt.hash(userData.PasswordU, SALT_ROUNDS);
+    }
+    // No permitir cambiar username
+    delete userData.UserA;
+
+    return await updateUser(id, userData);
+};
+
+const eliminarUsuario = async (id) => {
+    return await deleteUser(id);
+};
+
+const cambiarEstadoUsuario = async (id, estado) => {
+    return await updateUser(id, { estado });
+};
+
+module.exports = { login, logout, register, listarUsuarios, actualizarUsuario, eliminarUsuario, cambiarEstadoUsuario  };

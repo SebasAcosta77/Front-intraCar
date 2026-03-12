@@ -22,7 +22,8 @@ class CreateRoleUsersLog1708263000000 {
         await queryRunner.query(`
       INSERT INTO role (rol_name, rol_description) VALUES
         ('Agente', 'Agente de ventas que registra afiliados y comunica cotizaciones'),
-        ('BackOffice', 'Encargado de cotizar seguros y registrar coberturas');
+        ('BackOffice', 'Encargado de cotizar seguros y registrar coberturas'),
+        ('SuperUsuario', 'Tiene acceso a todo, incluyendo crear usuarios');
     `);
 
 

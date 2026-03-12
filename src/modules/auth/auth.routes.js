@@ -1,16 +1,26 @@
 const { Router } = require('express');
-const { loginController, registerController, logoutController } = require('./auth.controller.js');
-const { authMiddleware } = require('../../middlewares/auth.middleware.js');
+const {
+    loginController,
+    registerController,
+    logoutController,
+    listarUsuariosController,
+    actualizarUsuarioController,
+    eliminarUsuarioController,
+    cambiarEstadoUsuarioController,
+} = require('./auth.controller.js');
+const { authMiddleware, roleMiddleware } = require('../../middlewares/auth.middleware.js');
 
 const router = Router();
 
-// POST /api/v1/auth/login
+// Públicas
 router.post('/login', loginController);
 
-// POST /api/v1/auth/register
-router.post('/register', registerController);
-
-// POST /api/v1/auth/logout 
-router.post('/logout', authMiddleware, logoutController);
+// Protegidas
+router.post('/logout',      authMiddleware,                       logoutController);
+router.post('/register',    authMiddleware, roleMiddleware(3),    registerController);
+router.get('/users',        authMiddleware, roleMiddleware(3),    listarUsuariosController);
+router.put('/users/:id',    authMiddleware, roleMiddleware(3),    actualizarUsuarioController);
+router.delete('/users/:id', authMiddleware, roleMiddleware(3),    eliminarUsuarioController);
+router.patch('/users/:id/estado', authMiddleware, roleMiddleware(3), cambiarEstadoUsuarioController);
 
 module.exports = router;
