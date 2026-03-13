@@ -17,7 +17,7 @@ router.post('/login', loginController);
 
 // Protegidas
 router.post('/logout',      authMiddleware,                       logoutController);
-router.post('/register',    authMiddleware, roleMiddleware(3),    registerController);
+router.post('/register',   registerController);
 router.get('/users',        authMiddleware, roleMiddleware(3),    listarUsuariosController);
 router.put('/users/:id',    authMiddleware, roleMiddleware(3),    actualizarUsuarioController);
 router.delete('/users/:id', authMiddleware, roleMiddleware(3),    eliminarUsuarioController);

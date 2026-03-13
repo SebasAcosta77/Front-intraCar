@@ -7,6 +7,7 @@ const {
     remove,
 } = require('./cobertura.service.js');
 
+
 const getAllController = async (req, res) => {
     try {
         const coberturas = await getAll();

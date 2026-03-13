@@ -6,6 +6,8 @@ const {
     getAll, 
 } = require('./detalles.service.js');
 
+
+
 const getByAfiliadoController = async (req, res) => {
     try {
         const { id_afiliado } = req.params;

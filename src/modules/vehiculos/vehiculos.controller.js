@@ -7,6 +7,8 @@ const {
     getByAfiliado
 } = require('./vehiculos.service.js');
 
+
+
 const getAllController = async (req, res) => {
     try {
         const vehiculos = await getAll();
