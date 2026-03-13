@@ -4,14 +4,18 @@ const {
     create,
     update,
     remove,
-    getByAfiliado
+    getByAfiliado,
+    getByAgente,
 } = require('./vehiculos.service.js');
 
 
 
 const getAllController = async (req, res) => {
     try {
-        const vehiculos = await getAll();
+        const { id, role } = req.user;
+        const vehiculos = role === 1
+            ? await getByAgente(id)
+            : await getAll();
         return res.status(200).json({ ok: true, data: vehiculos });
     } catch (error) {
         return res.status(500).json({ ok: false, message: error.message });
@@ -22,6 +26,9 @@ const getByIdController = async (req, res) => {
     try {
         const { id } = req.params;
         const vehiculo = await getById(Number(id));
+        if (req.user.role === 1 && vehiculo.afiliado?.id_agente !== req.user.id) {
+            return res.status(403).json({ ok: false, message: 'No autorizado para ver este vehículo' });
+        }
         return res.status(200).json({ ok: true, data: vehiculo });
     } catch (error) {
         return res.status(404).json({ ok: false, message: error.message });

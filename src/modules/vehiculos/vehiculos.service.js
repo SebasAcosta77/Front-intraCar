@@ -5,6 +5,7 @@ const {
     updateVehiculo,
     deleteVehiculo,
     findVehiculosByAfiliado,
+    findVehiculosByAgente,
 } = require('./vehiculos.repository.js');
 
 const { findAfiliadoById } = require('../afiliados/afiliados.repository.js');
@@ -21,6 +22,10 @@ const getById = async (id) => {
 
 const getByAfiliado = async (id_afiliado) => {
     return await findVehiculosByAfiliado(id_afiliado);
+};
+
+const getByAgente = async (id_agente) => {
+    return await findVehiculosByAgente(id_agente);
 };
 
 const create = async (data) => {
@@ -42,4 +47,4 @@ const remove = async (id) => {
     return await deleteVehiculo(id);
 };
 
-module.exports = { getAll, getById, getByAfiliado, create, update, remove };
+module.exports = { getAll, getById, getByAfiliado, getByAgente, create, update, remove };

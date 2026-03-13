@@ -35,8 +35,24 @@ const deleteDetalle = async (id_afiliado) => {
     return await repo.delete({ id_afiliado });
 };
 
-const findAllDetalles = async () => {
+const findAllDetalles = async (filtro = {}) => {
     const repo = getRepository();
+
+    // Si viene filtro de agente, necesitamos filtrar por la relación afiliado.id_agente
+    if (filtro.id_agente) {
+        return await repo.find({
+            relations: ['afiliado'],
+            where: {
+                afiliado: {
+                    id_agente: filtro.id_agente,
+                    es_titular: 1  // solo titulares
+                }
+            },
+            order: { id: 'DESC' },
+        });
+    }
+
+    // BackOffice y SuperUsuario: todo
     return await repo.find({
         relations: ['afiliado'],
         order: { id: 'DESC' },

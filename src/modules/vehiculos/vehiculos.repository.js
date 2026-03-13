@@ -43,11 +43,22 @@ const deleteVehiculo = async (id) => {
     return await repo.delete(id);
 };
 
+const findVehiculosByAgente = async (id_agente) => {
+    const repo = getRepository();
+    return await repo.createQueryBuilder('vehiculo')
+        .leftJoinAndSelect('vehiculo.afiliado', 'afiliado')
+        .leftJoinAndSelect('vehiculo.cobertura', 'cobertura')
+        .where('afiliado.id_agente = :id_agente', { id_agente })
+        .orderBy('vehiculo.id', 'DESC')
+        .getMany();
+};
+
 module.exports = {
     findAllVehiculos,
     findVehiculoById,
     createVehiculo,
     updateVehiculo,
     deleteVehiculo,
-    findVehiculosByAfiliado
+    findVehiculosByAfiliado,
+    findVehiculosByAgente,
 };

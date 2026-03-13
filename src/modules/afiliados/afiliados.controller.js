@@ -12,7 +12,10 @@ const {
 
 const getAllController = async (req, res) => {
     try {
-        const afiliados = await getAll();
+        const { id, role } = req.user;
+        const afiliados = role === 1
+            ? await getByAgente(id)
+            : await getAll();
         return res.status(200).json({ ok: true, data: afiliados });
     } catch (error) {
         return res.status(500).json({ ok: false, message: error.message });
@@ -23,6 +26,9 @@ const getByIdController = async (req, res) => {
     try {
         const { id } = req.params;
         const afiliado = await getById(Number(id));
+        if (req.user.role === 1 && afiliado.id_agente !== req.user.id) {
+            return res.status(403).json({ ok: false, message: 'No autorizado para ver este afiliado' });
+        }
         return res.status(200).json({ ok: true, data: afiliado });
     } catch (error) {
         return res.status(404).json({ ok: false, message: error.message });
